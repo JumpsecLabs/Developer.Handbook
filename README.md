@@ -35,6 +35,8 @@ By clearly defining the boundaries of its application, this handbook aims to str
   - [Expectations](#expectations)
   - [Ethics](#ethics)
 - [Programming Languages](#programming-languages)
+  - [Exceptions](#exceptions)
+  - [General requirements](#general-requirements)
   - [Python](#python)
     - [CLI](#cli)
     - [APIs](#apis)
@@ -42,8 +44,7 @@ By clearly defining the boundaries of its application, this handbook aims to str
     - [Linux/Mac](#linuxmac)
     - [Windows](#windows)
   - [Bash](#bash)
-  - [C/C++](#cc)
-  - [DotNet C#](#dotnet-c)
+  - [Go](#go)
 - [Coding Styles \& Standards](#coding-styles--standards)
   - [Python Black](#python-black)
   - [Shell Scripting](#shell-scripting)
@@ -55,6 +56,7 @@ By clearly defining the boundaries of its application, this handbook aims to str
 - [Project Setup \& Configuration](#project-setup--configuration)
   - [Directory Structure](#directory-structure)
   - [Dependency Management](#dependency-management)
+    - [Python](#python-1)
 - [Testing](#testing)
   - [Testing Frameworks](#testing-frameworks)
   - [Code Coverage](#code-coverage)
@@ -71,10 +73,11 @@ By clearly defining the boundaries of its application, this handbook aims to str
   - [Best Practices](#best-practices)
   - [Scalability Considerations](#scalability-considerations)
 - [Accessibility and Internationalisation](#accessibility-and-internationalisation)
-  - [Accessibility](#accessibility)
-  - [Internationalisation (i18n)](#internationalisation-i18n)
 - [Learning and Development](#learning-and-development)
   - [Resources](#resources)
+    - [Python](#python-2)
+    - [Django](#django)
+    - [Go](#go-1)
   - [Knowledge Sharing](#knowledge-sharing)
 - [Appendencies](#appendencies)
 </div>
@@ -100,6 +103,13 @@ We delineate our strategic choice to primarily utilize Python and Bash scripting
 
 These languages' popularity is a significant advantage, as it ensures an abundance of resources for troubleshooting, learning, and community support online. This accessibility of information and support greatly facilitates problem-solving and innovation within our projects. Additionally, the widespread use of Python and Bash enhances our ability to recruit experienced professionals from the job market, ensuring that our team remains capable and adaptable. By focusing on these languages, we align our resources and efforts towards maximizing efficiency, collaboration, and the quality of our deliverables, ensuring that our team is well-equipped to meet the challenges and opportunities of our consultancy projects.
 
+## Exceptions
+There are engagements, such as deploying custom agents on client systems, in which it makes more sense to implement a native solution or Go version. These must be clearly labeled as an exception. 
+
+The reason behind this is the lack of protection and efficiencies for Python based binaries.
+
+## General requirements
+
 Generally the following requirements apply to all languages used:
 
 - Code should be self-explanatory; external documentation should be minimal and employed only when absolutely necessary.
@@ -108,13 +118,13 @@ Generally the following requirements apply to all languages used:
 
 - Do not re-invent the wheel. Do research first if a solution already exists and can be used to accomplish the goal
 
-- Fail Fast. It is better to write a PoC quickly and see if the approach works, than planning everything out first and then realise that it does not work.
+- Fail Fast. It is better to write a PoC quickly and see if the approach works, than planning everything out first, invest a lot of time implementing the perfect solution and then realise that it does not work.
 
 - Done is better than perfect. There is always a way to improve the code, however, there are very few projects that have a long livetivity and often a proof of concept is more than enough. 
 
 - We do not develop products that compete with FANG, we do not have 100+ mio. users. Efficiency in terms of multi processing / threading is often not a requirement, but rather a nice to have. Unfortunately, the bugs faced and time required to make such systems work flawlessly for our use cases is too much and better spend on other tasks.
 
-  - Instead, work with queues and spawn more single threaded workers in docker containers, swarms or k8s - if required
+  - Instead, work with queues and spawn more single threaded workers in docker containers - if required
 
 - For any tools that are only run on workstations of our team members environment variables are sufficient enough. 
 
@@ -135,6 +145,10 @@ Generally the following requirements apply to all languages used:
 - For larger projects, the development of test cases using [pytest](https://docs.pytest.org/en/8.0.x/) is essential to maintain code quality and reliability.
    
 - Avoid using one-liner for loops and similar constructs that compromise the readability of the code.
+
+- must use Type Hints
+
+- use F-Strings instead of `.format`
 
 
 ### CLI
@@ -191,9 +205,8 @@ On linux it is recommended to use `pyenv`, on windows the equivalent is [pyenv-w
 - Use a tool like [ShellCheck](https://www.shellcheck.net/) to quickly check the quality of code
 
 
-## C/C++
-
-## DotNet C#
+## Go
+- TBD
 
 # Coding Styles & Standards
 In our commitment to excellence, the "Coding Styles & Standards" section underscores the critical importance of adopting and adhering to rigorous coding standards across all our projects. 
@@ -218,7 +231,11 @@ The pre-commit hooks should then also make use of `https://github.com/psf/black`
 
 ## Shell Scripting
 
+TDB
+
 ## Code Review Standards
+
+TDB
 
 # Development Tools & Environments
 
@@ -246,23 +263,128 @@ Primarily for python development the following extensions can help with the stan
 
 ## Version Control
 
+- All Git Repositories must be on Azure DevOps in their relevant project
+
+- The repository name must follow the naming convention: ProjectName.RepoName
+  - i.e : CASM.ResourceCollections
+  
+- Pre Hooks must be used before commiting code into the repository
+
+- Each project, that is deployed must have 3 branches:
+  - main (production branch)
+  - testing (similar to main, but to test everything is ok before merging to production)
+  - dev (basis for Pull Requests and continious development)
+
+- each change must have an associated issue / task 
+
+- for each issue a new pull request (PR) is created
+
+- if more than 1 person develops code, a PR must be voted on by all developers
+  - the goal is to keep everyone informed about each code change and keeping the integrity of the code quality
+
+- a lead / manager, that does not spend more than 50% of their allocated time coding, does not have the right to reject a PR
+  - the reason is, they do not know the code base and hence cannot make code related decisions 
+
+- every PR must include unit / integration tests that cover the changes
+
+- unit / integration tests must pass, if a test fails it must be fixed
+
 # Project Setup & Configuration
 ## Directory Structure
+See [Examples](/examples/python/) folder (TBD)
+
 ## Dependency Management
+### Python
+- Use `pip` and `pip freeze > requirements.txt` to store all requirements
+- make sure that this comes from a virtual environment and not the global python interpreter
 
 # Testing
+
+It is up to each project if a Test Driven Development approach is taken.
+
 ## Testing Frameworks
+- use `pytest` as an easy to use testing framework in python
+
 ## Code Coverage
+- strive for 100% coverage
+
+- prioritise critical paths to test
+
+- use [fixtures](/examples/python/pytest/fixtures.py) for setup and teardown
+
+- CI must call all tests and all tests must pass
+
+- refactor tests just as you refactor code
 
 # Continious Integration & Continious Deployment (CI/CD)
 
+![Docker pipeline](/images/docker-container-pipeline.png)
+
 ## CI/CD Pipelines
+- Secrets must be stored in a Vault, not as environment variables
+
 
 ## Deployment Strategies
 
+- Any merge into `main` branch must trigger an automatic deployment
+
+- Only Jumpsec approved images are stored in a private registry
+
+- Only Jumpsec approved images are used for working in production
+
+- Every container must be slimmed down to the bare minimum 
+  - Look into [Slim on Github](https://github.com/slimtoolkit/slim)
+
+- Containers must be checked for vulnerabilities
+  - Look into [Trivy on Github](https://github.com/aquasecurity/trivy)
+
 # Documentation
 ## Code Documentation
+- python must use type hints
+
+Instead of 
+```python
+def greet(user, age):
+    return greeting.format(user, age)
+```
+
+use 
+
+```python
+def greet(user: str, age: int) -> str:
+    return greeting.format(user, age)
+```
+
+make use of `from typing import Dict, Optional, Union`
+
+- use docstrings, these can be constructed automatically with [Autodocstring](https://marketplace.visualstudio.com/items?itemName=njpwerner.autodocstring) in VSCode for python
+
+- we follow the Google Docstrings format
+  
+```python
+"""Gets and prints the spreadsheet's header columns
+
+Args:
+    file_loc (str): The file location of the spreadsheet
+    print_cols (bool): A flag used to print the columns to the console
+        (default is False)
+
+Returns:
+    list: a list of strings representing the header columns
+"""
+```
+
 ## Project Documentation
+
+- Every repository must have a `README.md`
+
+- if a README.md is not enough, consider an automatic documentation for developers by using Sphynx
+
+- If the project leaves the PoC stage and more people get involved it must have a `HOW_TO_CONTRIBUTE.md` file or section within the `README.md` 
+
+- in case the repository is public, it also needs  
+  - CONTRIBUTORS
+  - LICENSE
 
 # Security Practices
 
@@ -270,17 +392,62 @@ Primarily for python development the following extensions can help with the stan
 ## Data Protection
 
 # Performance Optimisation
+
+Even though there are many advanced concepts for optimisations, it must be limited to the resources and common knowledge that is among teams and team members involved 
+for specific implementations.
+
 ## Best Practices
+
+- Stick to built-in data types and libraries
+
+- limit external dependencies
+  - specifically try to avoid dependencies that have a high learning curve or bad documentation
+
+- regularily refactor the code and remove unnecessary code
+
+- more code = more bugs = more maintenance 
+
+- write understandable code
+
+- share knowledge and help others understand
+
+- https://youtu.be/Fot3_9eDmOs?t=50
+
 ## Scalability Considerations
 
+- opt for microservices that solve a problem and can be scaled via infrastructure
+
+- design for flexibility, but don't implement the base for the perfect solution first
+  - by the a module based solution makes sense the project might have died or changed so much that the inital though process and implementation has become obsolete
+  - it is better to work according to the requirements and only when they change to implement the "better solution with more work"
+
+- utilise cloud solutions like Azure
+
+- embrace CI / CD in your project
+
+
 # Accessibility and Internationalisation
-## Accessibility
-## Internationalisation (i18n)
+- No need, leave it out
+
+- Everything must be written in English 
 
 # Learning and Development
 ## Resources
 
+### Python 
+- https://www.youtube.com/watch?v=kqtD5dpn9C8&ab_channel=ProgrammingwithMosh
+- https://www.youtube.com/watch?v=eWRfhZUzrAc&ab_channel=freeCodeCamp.org
+
+### Django 
+- https://www.youtube.com/watch?v=rHux0gMZ3Eg&t=15s&ab_channel=ProgrammingwithMosh
+
+
+### Go 
+- https://www.youtube.com/watch?v=8uiZC0l4Ajw&ab_channel=AlexMux
+- https://www.youtube.com/watch?v=un6ZyFkqFKo&ab_channel=freeCodeCamp.org
+
 ## Knowledge Sharing
+- internal links TBD
 
 # Appendencies
-
+- TBD
