@@ -168,6 +168,8 @@ Generally the following requirements apply to all languages used:
 
 - Module based similar to how Metasploit works use [SploitKit](https://github.com/dhondta/python-sploitkit)
 
+- Emojis via [emoji](https://github.com/carpedm20/emoji)
+
 ### APIs
 - Use either [FastAPI](https://fastapi.tiangolo.com/) or [Flask](https://flask.palletsprojects.com/en/3.0.x/)
 
