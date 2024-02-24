@@ -68,6 +68,7 @@ By clearly defining the boundaries of its application, this handbook aims to str
   - [Project Documentation](#project-documentation)
 - [Security Practices](#security-practices)
   - [Secure Coding Guidelines](#secure-coding-guidelines)
+    - [Python](#python-2)
   - [Data Protection](#data-protection)
 - [Performance Optimisation](#performance-optimisation)
   - [Best Practices](#best-practices)
@@ -75,7 +76,7 @@ By clearly defining the boundaries of its application, this handbook aims to str
 - [Accessibility and Internationalisation](#accessibility-and-internationalisation)
 - [Learning and Development](#learning-and-development)
   - [Resources](#resources)
-    - [Python](#python-2)
+    - [Python](#python-3)
     - [Django](#django)
     - [Go](#go-1)
   - [Knowledge Sharing](#knowledge-sharing)
@@ -270,9 +271,9 @@ Primarily for python development the following extensions can help with the stan
 - The repository name must follow the naming convention: ProjectName.RepoName
   - i.e : CASM.ResourceCollections
   
-- Pre Hooks must be used before commiting code into the repository
+- Pre Hooks must be used before commiting code into a repository
 
-- Each project, that is deployed must have 3 branches:
+- Each development project, that is deployed must have 3 branches:
   - main (production branch)
   - testing (similar to main, but to test everything is ok before merging to production)
   - dev (basis for Pull Requests and continious development)
@@ -290,6 +291,20 @@ Primarily for python development the following extensions can help with the stan
 - every PR must include unit / integration tests that cover the changes
 
 - unit / integration tests must pass, if a test fails it must be fixed
+
+When using Azure Boards keep the following basic work item structures in mind.
+
+![Azure Epic-Issue-Task Hierachy](/images/basic-process-epics-issues-tasks-2.png)
+
+We have an epic that can be across multiple sprints.
+
+An epic consists of multiple issues (work items), an issue is considered `Done` when all it's tasks are completed.
+
+Move an issue or task to `On Hold` if you the work item has unfinished or otherwise blocking dependencies.
+
+There cannot be more than 5 concurrent items being worked on, as it hinders quality in tracking and development.
+
+There must not be more than 5 concurrent items on hold. 
 
 # Project Setup & Configuration
 ## Directory Structure
@@ -391,7 +406,24 @@ Returns:
 # Security Practices
 
 ## Secure Coding Guidelines
+
+### Python
+
+- use f-Strings
+
+- use an ORM instead of hand written SQL queries
+
+- run [trivy](https://github.com/aquasecurity/trivy) locally
+
+```
+trivy.exe fs <folder_name>
+```
+
+- don't commit secrets to git, use .env file locally, use vault in deployment
+
 ## Data Protection
+
+TBD
 
 # Performance Optimisation
 
