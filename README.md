@@ -133,6 +133,8 @@ Generally the following requirements apply to all languages used:
 
 - Use a `.gitignore` file from this repo [Github](https://github.com/github/gitignore/tree/main) for your specific project.
 
+- Read and understand the [12 Factor App](https://12factor.net/)
+
 ## Python
 
 - Every python project should have the `.gitignore` file from [Github](https://github.com/github/gitignore/blob/main/Python.gitignore)
@@ -150,6 +152,10 @@ Generally the following requirements apply to all languages used:
 - must use Type Hints
 
 - use F-Strings instead of `.format`
+
+- Django views are written in Class Based Views
+
+  Do not use * imports, specify each input. Do not leave unused imports in the top
 
 
 ### CLI
