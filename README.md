@@ -215,7 +215,41 @@ On linux it is recommended to use `pyenv`, on windows the equivalent is [pyenv-w
 
 
 ## Go
-- TBD
+- For more scalable solutions, (generally microservices, APIs etc.) you can use Go. It does a lot of the heavy lifting to scale on multiple cores and threads during runtime.
+
+To get started, write `go mod init <project>` where `project` can be the name or path of the project. If 
+the project is supposed to be used as a package for other projects, consider naming it a [URL](https://go.dev/ref/mod#module-path). 
+
+For example, if you'd like to include it in another project and the package name is 
+```
+github.com/username/dirname/path
+```
+
+To fetch it you would use:
+```go get github.com/username/dirname/path```
+
+Since we're using Azure Devops, it should be URLs that lead to our repositories.
+
+The go.mod file that will be created contains the golang version of your project.
+
+### APIs
+[Gorilla Mux](https://github.com/gorilla/mux)
+
+[Chi](https://github.com/go-chi/chi)
+
+[Gin](https://github.com/gin-gonic/gin)
+
+### Some useful packages
+[validator](https://github.com/go-playground/validator) for validating structs, useful for sanitizing JSON.
+
+[slices](https://golang.org/x/exp/slices) for many useful slice methods that the std lib refuses to implement.
+
+There's no strict way to build a Go application, but a Makefile can be used if one prefers to make cross-platform compilation easier.
+
+### Naming Conventions
+Go uses [camelCase](https://stackoverflow.com/a/22688926) for function names, but beware that for functions or variables (especially struct members!) that should be public from one package to another, the first letter must be uppercase too.
+
+
 
 # Coding Styles & Standards
 In our commitment to excellence, the "Coding Styles & Standards" section underscores the critical importance of adopting and adhering to rigorous coding standards across all our projects. 
