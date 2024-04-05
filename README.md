@@ -1,4 +1,4 @@
-# Internal Development Handbook
+# Developer Handbook
 
 ## Purpose
 The primary purpose of this handbook is to act as an essential guide for any development project within our consultancy firm, which operates with more constrained resources compared to a product development house. 
@@ -28,7 +28,7 @@ By clearly defining the boundaries of its application, this handbook aims to str
 <div>
 <h1> Table of Contents</h1>
 
-- [Internal Development Handbook](#internal-development-handbook)
+- [Developer Handbook](#developer-handbook)
   - [Purpose](#purpose)
   - [Scope](#scope)
 - [Code of Conduct](#code-of-conduct)
@@ -45,6 +45,9 @@ By clearly defining the boundaries of its application, this handbook aims to str
     - [Windows](#windows)
   - [Bash](#bash)
   - [Go](#go)
+    - [APIs](#apis-1)
+    - [Some useful packages](#some-useful-packages)
+    - [Naming Conventions](#naming-conventions)
 - [Coding Styles \& Standards](#coding-styles--standards)
   - [Python Black](#python-black)
   - [Shell Scripting](#shell-scripting)
