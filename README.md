@@ -309,7 +309,7 @@ Primarily for python development the following extensions can help with the stan
 
 ## Version Control
 
-- All Git Repositories must be on Azure DevOps in their relevant project
+- All Git Repositories must be on Github Enterprise in their relevant project
 
 - The repository name must follow the naming convention: ProjectName.RepoName
   - i.e : CASM.ResourceCollections
@@ -320,13 +320,31 @@ Primarily for python development the following extensions can help with the stan
   - main (production branch)
   - testing (similar to main, but to test everything is ok before merging to production)
   - dev (basis for Pull Requests and continious development)
+  
 
 - each change must have an associated issue / task 
+  - Because this way all work is done in isolation on a dedicated branch rather than the main branch. It allows you to submit multiple pull requests without confusion. You can iterate without polluting the master branch with potentially unstable, unfinished code
 
+- branch out from dev/development
+  - This way, you can make sure that code in master will almost always build without problems, and can be mostly used directly for releases (this might be overkill for some projects).
+  
+- do not push to development, testing or main, instead use Pull Requests
+  - It notifies team members that they have completed a feature. It also enables easy peer-review of the code and dedicates forum for discussing the proposed feature.
+
+- Update your local development branch and do an interactive rebase before pushing your new code and creating pull requests
+  - Rebasing will merge in the requested branch (master or develop) and apply the commits that you have made locally to the top of the history without creating a merge commit (assuming there were no conflicts). Resulting in a nice and clean history.
+
+- Resolve potential conflicts while rebasing and before making a Pull Request.
+
+- Delete local and remote feature branches after merging.
+  - It will clutter up your list of branches with dead branches. It ensures you only ever merge the branch back into (development) once. Feature branches should only exist while the work is still in progress.
 - for each issue a new pull request (PR) is created
 
 - if more than 1 person develops code, a PR must be voted on by all developers
   - the goal is to keep everyone informed about each code change and keeping the integrity of the code quality
+
+- Before making a Pull Request, make sure your feature branch builds successfully and passes all tests (including code style checks).
+  
 
 - a lead / manager, that does not spend more than 50% of their allocated time coding, does not have the right to reject a PR
   - the reason is, they do not know the code base and hence cannot make code related decisions 
@@ -335,19 +353,37 @@ Primarily for python development the following extensions can help with the stan
 
 - unit / integration tests must pass, if a test fails it must be fixed
 
-When using Azure Boards keep the following basic work item structures in mind.
+The workflow looks like this:
 
-![Azure Epic-Issue-Task Hierachy](/images/basic-process-epics-issues-tasks-2.png)
+```
+git checkout -b <branchname>
+# Either
+git add -p
 
-We have an epic that can be across multiple sprints.
+# for the lazy ones, but this adds everything
+git add . 
 
-An epic consists of multiple issues (work items), an issue is considered `Done` when all it's tasks are completed.
+# more granular
+git add file1 file2 file3
 
-Move an issue or task to `On Hold` if you the work item has unfinished or otherwise blocking dependencies.
 
-There cannot be more than 5 concurrent items being worked on, as it hinders quality in tracking and development.
+git checkout development
+git pull
 
-There must not be more than 5 concurrent items on hold. 
+git checkout <branchname>
+git rebase -i --autosquash development
+
+git push
+```
+
+If you are usign the Github Pull Requests extension for vscode, you can use the editor to "start working on an issue" which will create a branch for you and also help you create a pull request"
+
+
+When using Github Issues keep the following basic work item structures in mind.
+
+For a `README.md` template you can use the one from the [examples folder](./examples/README.md)
+
+
 
 # Project Setup & Configuration
 ## Directory Structure
@@ -355,6 +391,7 @@ See [Examples](/examples/python/) folder (TBD)
 
 ## Dependency Management
 ### Python
+- Preferrably use `poetry` for more than just scripts.
 - Use `pip` and `pip freeze > requirements.txt` to store all requirements
 - make sure that this comes from a virtual environment and not the global python interpreter
 
