@@ -412,6 +412,8 @@ Consider using testing helpers. Learn more about [mutation testing here](https:/
 
 - look at [Hypothesis](https://github.com/HypothesisWorks/hypothesis) to do [property-based testing](https://www.mayhem.security/blog/what-is-property-based-testing#:~:text=While%20unit%20tests%20check%20that,defines%20correctness%20(and%20safety).)
 
+- for benchmarking you can use [pytest-benchmark](https://cookiecutter-cruft-poetry-tox-pre-commit-ci-cd.readthedocs.io/en/latest/)
+
 ## Code Coverage
 - strive for 100% coverage
   - use [coverage.py](https://coverage.readthedocs.io/en/7.4.4/#) to track this
