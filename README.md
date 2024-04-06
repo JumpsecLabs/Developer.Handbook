@@ -271,9 +271,11 @@ It's through these meticulous practices that we not only uphold the integrity of
 
 ## Python Black
 
-All python projects must use [black](https://github.com/psf/black). Within VSCode you use the following extension: [Black Formatter](https://marketplace.visualstudio.com/items?itemName=ms-python.black-formatter)
+All python projects must use [black](https://github.com/psf/black). 
 
-The pre-commit hooks should then also make use of `https://github.com/psf/black`, as seen in the `.pre-commit-config.yaml.example` file.
+Fastest method is using [ruff](https://github.com/astral-sh/ruff)
+
+For pre-commit you can use [ruff-pre-commit](https://github.com/astral-sh/ruff-pre-commit)
 
 ## Shell Scripting
 
@@ -399,11 +401,20 @@ See [Examples](/examples/python/) folder (TBD)
 
 It is up to each project if a Test Driven Development approach is taken.
 
+Have a look at this [cookiecutter project](https://cookiecutter-cruft-poetry-tox-pre-commit-ci-cd.readthedocs.io/en/latest/)
+
 ## Testing Frameworks
 - use `pytest` as an easy to use testing framework in python
 
+Consider using testing helpers. Learn more about [mutation testing here](https://hackernoon.com/mutmut-a-python-mutation-testing-system-9b9639356c78)
+
+- you can use [mutmut](https://github.com/boxed/mutmut) for mutation testing
+
+- look at [Hypothesis](https://github.com/HypothesisWorks/hypothesis) to do [property-based testing](https://www.mayhem.security/blog/what-is-property-based-testing#:~:text=While%20unit%20tests%20check%20that,defines%20correctness%20(and%20safety).)
+
 ## Code Coverage
 - strive for 100% coverage
+  - use [coverage.py](https://coverage.readthedocs.io/en/7.4.4/#) to track this
 
 - prioritise critical paths to test
 
@@ -452,9 +463,13 @@ def greet(user: str, age: int) -> str:
     return greeting.format(user, age)
 ```
 
-make use of `from typing import Dict, Optional, Union`
+you can make use of `from typing import Dict, Optional, Union`, though that depends on the python intepreter that you are using. 
+
+- Consider [mypy](https://github.com/python/mypy) for typing enforcing
 
 - use docstrings, these can be constructed automatically with [Autodocstring](https://marketplace.visualstudio.com/items?itemName=njpwerner.autodocstring) in VSCode for python
+
+- to check for missing docstrings you can use [interrogate](https://interrogate.readthedocs.io/en/latest/#why-do-i-need-this)
 
 - we follow the Google Docstrings format
   
@@ -499,11 +514,12 @@ Returns:
 trivy.exe fs <folder_name>
 ```
 
-- don't commit secrets to git, use .env file locally, use vault in deployment
 
 ## Data Protection
 
-TBD
+- don't commit secrets to git, use .env file locally, use vault in deployment
+
+You can check this also with [detect-secrets](https://github.com/Yelp/detect-secrets)
 
 # Performance Optimisation
 
