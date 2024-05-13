@@ -1,0 +1,14 @@
+{
+    "name": "myproject_name-dev-container",
+    "build": {
+        "dockerfile": "Dockerfile"
+    },
+    "customizations": {
+        "vscode": {
+            "extensions": [
+                "ms-python.python",
+                "njpwerner.autodocstring"
+            ]
+        }
+    }
+}

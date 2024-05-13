@@ -295,19 +295,32 @@ TDB
 
 As the majority of people use VSCode the following extensions and configuration options are highlighted. Feel free to add any other editor if you and others are using it.
 
+Because the primary IDE should be VSCode, it is also advised to use developer containers. 
+This allows for an equal developer experience and code environment. 
+
+[Developer containers](https://code.visualstudio.com/docs/devcontainers/containers) are project specific and should be pushed into the code repository. 
+
+You can look at an [example here](examples/developer_container/README.md).
 
 
 ### VSCode
 
 General:
+
 - https://marketplace.visualstudio.com/items?itemName=codezombiech.gitignore
+
+Documentation:
+
 - https://marketplace.visualstudio.com/items?itemName=yzhang.markdown-all-in-one
+- https://marketplace.visualstudio.com/items?itemName=yzane.markdown-pdf
 
 Primarily for python development the following extensions can help with the standards defined in this handbook:
 
 - https://marketplace.visualstudio.com/items?itemName=njpwerner.autodocstring
 - https://marketplace.visualstudio.com/items?itemName=ms-python.black-formatter
 - https://marketplace.visualstudio.com/items?itemName=ms-python.pylint
+
+
 
 ## Version Control
 
@@ -321,8 +334,9 @@ Primarily for python development the following extensions can help with the stan
 - Each development project, that is deployed must have 3 branches:
   - main (production branch)
   - testing (similar to main, but to test everything is ok before merging to production)
-  - dev (basis for Pull Requests and continious development)
-  
+  - development (basis for Pull Requests and continious development)
+
+- Each repository that has code must be checked by Github dependend bot. It informs about available updates and mentions security issues  
 
 - each change must have an associated issue / task 
   - Because this way all work is done in isolation on a dedicated branch rather than the main branch. It allows you to submit multiple pull requests without confusion. You can iterate without polluting the master branch with potentially unstable, unfinished code
@@ -384,6 +398,8 @@ If you are usign the Github Pull Requests extension for vscode, you can use the 
 When using Github Issues keep the following basic work item structures in mind.
 
 For a `README.md` template you can use the one from the [examples folder](./examples/README.md)
+
+
 
 
 
