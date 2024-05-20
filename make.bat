@@ -1,5 +1,5 @@
 mkdir dist
 
-pandoc $(cat pandoc_order.txt) -s -o dist/developer_handbook.html --toc --number-sections
+pandoc $(cat pandoc_order.txt) metadata.yaml --include-before-body=version.md -s -o dist/developer_handbook.html --toc --number-sections --wrap=none
 
-pandoc intermediate_document.html -s -o output_document.pdf
+pandoc dist/developer_handbook.html -s --pdf-engine=xelatex -o dist/developer_handbook.pdf

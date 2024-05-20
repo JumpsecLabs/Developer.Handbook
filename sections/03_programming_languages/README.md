@@ -4,7 +4,7 @@ We delineate our strategic choice to primarily utilize Python and Bash scripting
 These languages' popularity is a significant advantage, as it ensures an abundance of resources for troubleshooting, learning, and community support online. This accessibility of information and support greatly facilitates problem-solving and innovation within our projects. Additionally, the widespread use of Python and Bash enhances our ability to recruit experienced professionals from the job market, ensuring that our team remains capable and adaptable. By focusing on these languages, we align our resources and efforts towards maximizing efficiency, collaboration, and the quality of our deliverables, ensuring that our team is well-equipped to meet the challenges and opportunities of our consultancy projects.
 
 ## Exceptions
-There are engagements, such as deploying custom agents on client systems, in which it makes more sense to implement a native solution or Go version. These must be clearly labeled as an exception. 
+There are engagements, such as deploying custom C2 agents on client systems, in which it makes more sense to implement a native solution or Go version. These must be clearly labeled as an exception. 
 
 The reason behind this is the lack of protection and efficiencies for Python based binaries.
 
@@ -16,13 +16,13 @@ Generally the following requirements apply to all languages used:
 
 - Code readability is paramount; the code must be clear and understandable to other team members.
 
-- Do not re-invent the wheel. Do research first if a solution already exists and can be used to accomplish the goal
+- Do not re-invent the wheel. Do research first if a solution already exists and can be used to accomplish the desired goal
 
 - Fail Fast. It is better to write a PoC quickly and see if the approach works, than planning everything out first, invest a lot of time implementing the perfect solution and then realise that it does not work.
 
 - Done is better than perfect. There is always a way to improve the code, however, there are very few projects that have a long livetivity and often a proof of concept is more than enough. 
 
-- We do not develop products that compete with FANG, we do not have 100+ mio. users. Efficiency in terms of multi processing / threading is often not a requirement, but rather a nice to have. Unfortunately, the bugs faced and time required to make such systems work flawlessly for our use cases is too much and better spend on other tasks.
+- We do not develop products that compete with FAANG, we do not have 100+ mio. users. Efficiency in terms of multi processing / threading is often not a requirement, but rather a nice to have. Unfortunately, the bugs faced and time required to make such systems work flawlessly for our use cases is too much and better spend on other tasks.
 
   - Instead, explore queues, load balancers and a multi container architecture to distribute load 
 
@@ -30,7 +30,7 @@ Generally the following requirements apply to all languages used:
   - Key Vaults and similar secret handling MUST be used in deployed services (testing & production)  
 
 - Limit yourself to docker compose files, as these can easily be run on every workstation, without configuring docker swarm or k8s/minicube.
-  - When deploying to a cloud like Azure, kubernetes makes more sense
+  - When deploying to a cloud like Azure or AWS, kubernetes makes more sense, specifically for flagship projects
 
 - Use a `.gitignore` file from this repo [Github](https://github.com/github/gitignore/tree/main) for your specific project.
 
@@ -40,8 +40,9 @@ Generally the following requirements apply to all languages used:
 
 - Every python project should have the `.gitignore` file from [Github](https://github.com/github/gitignore/blob/main/Python.gitignore)
 
-- Every project must utilize its own virtual environment (`virtualenv`) and include a `requirements.txt` file for dependency management.
+- Every project must utilise its own virtual environment (`virtualenv`) and include a `requirements.txt` file for dependency management.
   - [Poetry](https://python-poetry.org/) should be preferred
+  - Poetry must be used for any publicly available tools that are Python based
  
 - Adherence to standard PEP conventions is mandatory for all projects to ensure code consistency and readability.
  
@@ -51,15 +52,162 @@ Generally the following requirements apply to all languages used:
    
 - Avoid using one-liner for loops and similar constructs that compromise the readability of the code.
 
-- must use Type Hints
+- must use Type Hints, use mypy if possible!
+  
+- must have docstrings with meaningful descriptions that are kept up to date. 
 
 - use F-Strings instead of `.format` or chaining strings
 
 - Django views are written in Class Based Views
 
-- Do not use * imports, specify each input. Do not leave unused imports in the top
+- Do not use * imports, specify each import. Do not leave unused imports in the top
   - The order of imports matters: Python Standard, 3rd Party, Project
 
+### pre-commit Setup
+
+To ensure correctly formatted code is pushed to the repositories you can use the following pre-commit configuration:
+
+```yaml
+repos:
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v2.3.0
+    hooks:
+      - id: check-yaml
+      - id: end-of-file-fixer
+      - id: trailing-whitespace
+      - id: check-added-large-files
+      - id: check-case-conflict
+      - id: check-docstring-first
+      - id: check-json
+      - id: fix-encoding-pragma
+      - id: check-merge-conflict
+      - id: mixed-line-ending
+
+  - repo: https://github.com/PyCQA/bandit
+    rev: 1.7.7
+    hooks:
+      - id: bandit
+        args: ['-c', 'pyproject.toml']
+        additional_dependencies: ['bandit[toml]']
+
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: v0.3.5
+    hooks:
+      - id: ruff
+        args: [ '--fix' ]
+      - id: ruff-format
+
+  - repo: https://github.com/Yelp/detect-secrets
+    rev: v1.4.0
+    hooks:
+    -   id: detect-secrets
+        args: ['--baseline', '.secrets.baseline']
+        exclude: package.lock.json
+
+  - repo: https://github.com/Lucas-C/pre-commit-hooks-safety
+    rev: v1.3.3
+    hooks:
+    -   id: python-safety-dependencies-check
+        files: pyproject.toml
+        args: ['--disable-optional-telemetry', "--ignore=51457"]
+
+
+  - repo: local
+    hooks:
+      - id: mypy
+        name: local mypy
+        description: static type checker
+        entry: poetry run mypy
+        files: ^({PROJECT_NAME}/|tests/)
+        language: system
+        types: [python]
+
+      - id: coverage
+        name: local pytest coverage
+        description: runs pytest along with coverage
+        entry: poetry run pytest --cov {PROJECT_NAME} tests
+        files: ^({PROJECT_NAME}/|tests/)
+        language: system
+        types: [python]
+
+
+default_language_version:
+  python: python3
+```
+
+### Poetry Setup
+a typical `pyproject.toml` file should include the following dev dependencies and tool configurations:
+```toml
+[tool.poetry.group.dev.dependencies]
+mypy = "^1.9.0"
+nitpick = "^0.35.0"
+pre-commit = "^3.7.0"
+safety = "^3.1.0"
+pytest = "^8.1.1"
+wemake-python-styleguide = "^0.19.2"
+pytest-cov = "^5.0.0"
+detect-secrets = "^1.4.0"
+coverage = "^7.4.4"
+interrogate = "^1.5.0"
+ruff = "^0.3.5"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.poetry.scripts]
+changeme_app = 'changeme_app.__main__:run'
+
+[tool.mypy]
+plugins = [
+  "pydantic.mypy"
+]
+
+follow_imports = "silent"
+warn_redundant_casts = true
+warn_unused_ignores = true
+disallow_any_generics = true
+check_untyped_defs = true
+no_implicit_reexport = true
+
+# for strict mypy: (this is the tricky one :-))
+disallow_untyped_defs = true
+
+[tool.pydantic-mypy]
+init_forbid_extra = true
+init_typed = true
+warn_required_dynamic_aliases = true
+
+[tool.nitpick]
+style = "https://raw.githubusercontent.com/wemake-services/wemake-python-styleguide/master/styles/nitpick-style-wemake.toml"
+
+[tool.interrogate]
+ignore-init-method = true
+ignore-init-module = true
+ignore-magic = true
+ignore-semiprivate = false
+ignore-private = false
+ignore-property-decorators = false
+ignore-module = true
+ignore-nested-functions = false
+ignore-nested-classes = true
+ignore-setters = false
+fail-under = 95
+exclude = ["setup.py", "docs", "build"]
+ignore-regex = ["^get$", "^mock_.*", ".*BaseClass.*"]
+# possible values: 0 (minimal output), 1 (-v), 2 (-vv)
+verbose = 0
+quiet = false
+whitelist-regex = []
+color = true
+omit-covered-files = false
+generate-badge = "."
+badge-format = "svg"
+
+[tool.bandit]
+skips = ["B101"]
+
+```
 
 ### CLI
 **If you want to write a CLI with certain Quality of Life features check out the following, rather than implementing it yourself:**
@@ -82,7 +230,7 @@ Generally the following requirements apply to all languages used:
 
 ### APIs
 - Use either [FastAPI](https://fastapi.tiangolo.com/) or [Flask](https://flask.palletsprojects.com/en/3.0.x/)
-- Stick to REST Apis
+- Stick to REST Apis, in 99.99% of cases a GraphQL API is overkill
 
 ### Databases
 - Make use of ORMs, writing SQL queries and handling SQL manually is overkill in many projects. Pure SQL requires manual migration setups, connection handling, and allow for possible SQL injections etc. Things ORMs often do out of the box
@@ -107,9 +255,11 @@ class BaseModel(peewee.Model):
 
 - A more complex database ORM solution, that should be used for long living projects is [Django's ORM](https://docs.djangoproject.com/en/5.0/topics/db/queries/) - which can be used without a full django integration, but provides you with automatic migration methods (ALTER table, keys etc).
 
+### Installing python apps
+Though, this is not necessarily part of programming; look into pipx to install any python based tools, including our own. pipx will create a managed virtualenvironment for each tool and therefore keep all dependencies separated. 
+
 ### Linux/Mac
 Use [pyenv](https://github.com/pyenv/pyenv) to easily manage your python installation and have multiple versions installed alongside. It also allows you to specify a different version per project.
-
 
 
 ### Windows

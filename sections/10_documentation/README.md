@@ -42,10 +42,11 @@ Returns:
 
 - Every repository must have a `README.md`
 
-- if a README.md is not enough, consider an automatic documentation for developers by using Sphynx
+- if a README.md is not enough, consider an automatic documentation for developers by using [Sphinx](https://www.sphinx-doc.org/en/master/)
 
 - If the project leaves the PoC stage and more people get involved it must have a `HOW_TO_CONTRIBUTE.md` file or section within the `README.md` 
 
-- in case the repository is public, it also needs  
+- in case the repository is public, it must have  
   - CONTRIBUTORS
   - LICENSE
+
