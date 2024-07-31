@@ -51,3 +51,45 @@ jobs:
       with:
         name: developer-handbook
         path: docs/developer_handbook.pdf
+
+
+  release:
+    needs: build
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: Extract version
+      id: extract_version
+      run: |
+        version=$(grep -oP 'Version: \K[0-9]+\.[0-9]+\.[0-9]+' docs/version.md)
+        echo "::set-output name=version::$version"
+
+    - name: Create Release
+      id: create_release
+      uses: actions/create-release@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        tag_name: v${{ steps.extract_version.outputs.version }}
+        release_name: Release v${{ steps.extract_version.outputs.version }}
+        draft: false
+        prerelease: false
+
+    - name: Download artifact
+      uses: actions/download-artifact@v2
+      with:
+        name: developer-handbook
+        path: ./
+
+    - name: Upload Release Asset
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }}
+        asset_path: ./developer_handbook.pdf
+        asset_name: developer_handbook.pdf
+        asset_content_type: application/pdf
