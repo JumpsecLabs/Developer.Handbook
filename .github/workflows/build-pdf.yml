@@ -23,7 +23,8 @@ jobs:
 
     - name: Install pandoc
       run: |
-        pip install pandoc
+        pip install pipx 
+        pipx install pandoc
 
     - name: Generate HTML from markdown
       run: |
