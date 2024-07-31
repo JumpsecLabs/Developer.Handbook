@@ -1,0 +1,48 @@
+name: Build Developer Handbook
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: Set up Python
+      uses: actions/setup-python@v2
+      with:
+        python-version: '3.x'
+
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+
+    - name: Install pandoc
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y pandoc
+
+    - name: Create dist directory
+      run: mkdir dist
+
+    - name: Generate HTML from markdown
+      run: |
+        pandoc $(cat pandoc_order.txt) metadata.yaml --include-before-body=version.md -s -o dist/developer_handbook.html --toc --number-sections --wrap=none
+
+    - name: Generate PDF from HTML
+      run: pandoc dist/developer_handbook.html -s --pdf-engine=xelatex -o dist/developer_handbook.pdf
+
+    - name: Upload artifacts
+      uses: actions/upload-artifact@v2
+      with:
+        name: developer-handbook
+        path: dist/

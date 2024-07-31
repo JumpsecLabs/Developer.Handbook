@@ -1,0 +1,4 @@
+pandoc==2.3
+plumbum==1.8.3
+ply==3.11
+pywin32==306
