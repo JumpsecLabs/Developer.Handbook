@@ -44,7 +44,7 @@ jobs:
     - name: Generate PDF from HTML
       run: |
         cd docs
-        pandoc developer_handbook.html -s --pdf-engine=xelatex -o developer_handbook.pdf
+        pandoc developer_handbook.html -s --pdf-engine=pdflatex -o developer_handbook.pdf
 
     - name: Upload artifacts
       uses: actions/upload-artifact@v2
