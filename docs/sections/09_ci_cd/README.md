@@ -1,6 +1,6 @@
 # Continious Integration & Continious Deployment (CI/CD)
 
-![Docker pipeline](/docs/images/docker-container-pipeline.png)
+![Docker pipeline](../../images/docker-container-pipeline.png)
 
 ## CI/CD Pipelines
 - Secrets must be stored in a Vault, not as environment variables
