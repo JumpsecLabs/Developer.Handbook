@@ -1,9 +1,6 @@
 ---
 title:  'JUMPSEC: Developer Handbook'
 subtitle: "Our guide to a healthy code base"
-author:
-- Bjoern Schwabe (Lead) <bjoern.schwabe@jumpsec.com>
-- John (Yanni) Christoforidis (Contributor) <john.christoforidis@jumpsec.com>
 keywords: [developer, handbook, coding standard]
 abstract-title: Abstract
 abstract: |

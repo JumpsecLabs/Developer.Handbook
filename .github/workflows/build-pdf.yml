@@ -28,13 +28,16 @@ jobs:
 
     - name: Generate HTML from markdown
       run: |
+        cd docs
         pandoc $(cat pandoc_order.txt) metadata.yaml --include-before-body=version.md -s -o developer_handbook.html --toc --number-sections --wrap=none
 
     - name: Generate PDF from HTML
-      run: pandoc developer_handbook.html -s --pdf-engine=xelatex -o developer_handbook.pdf
+      run: |
+        cd docs
+        pandoc developer_handbook.html -s --pdf-engine=xelatex -o developer_handbook.pdf
 
     - name: Upload artifacts
       uses: actions/upload-artifact@v2
       with:
         name: developer-handbook
-        path: developer_handbook.pdf
+        path: docs/developer_handbook.pdf
