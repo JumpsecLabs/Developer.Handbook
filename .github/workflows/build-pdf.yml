@@ -44,12 +44,12 @@ jobs:
     - name: Generate HTML from markdown
       run: |
         cd docs
-        pandoc $(cat pandoc_order.txt) --include-before-body=./version.md -s -o developer_handbook.html --toc --number-sections --wrap=none
+        pandoc -t html --include-before-body=./version.md -s -o developer_handbook.html --toc --number-sections --wrap=none $(cat pandoc_order.txt)
 
     - name: Generate PDF from HTML
       run: |
         cd docs
-        pandoc developer_handbook.html -s --pdf-engine=pdflatex -o developer_handbook.pdf
+        pandoc developer_handbook.html -s --pdf-engine=pdflatex -o developer_handbook.pdf -t pdf -f html
 
     - name: Upload artifacts
       uses: actions/upload-artifact@v2
