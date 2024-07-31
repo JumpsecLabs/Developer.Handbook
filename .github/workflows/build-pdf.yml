@@ -23,6 +23,7 @@ jobs:
 
     - name: Install pandoc
       run: |
+        pip install setuptools --upgrade
         pip install --upgrade pandoc
 
     - name: Generate HTML from markdown
