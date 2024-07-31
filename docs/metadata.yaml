@@ -6,4 +6,4 @@ abstract-title: Abstract
 abstract: |
   The "Developer Handbook" offers comprehensive guidance for team members on how to effectively approach, maintain, and work on technical projects involving programming and deployments. Regardless of whether the tools or services are intended for internal use, public release, or to support other services we provide, the quality of code and adherence to security requirements must remain consistent.
 lang: en-GB
-...
+---
