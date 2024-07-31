@@ -25,6 +25,17 @@ jobs:
       run: |
         sudo apt-get install pandoc -y
 
+    - name: Verify files
+      run: |
+        for file in $(cat pandoc_order.txt); do
+          if [ ! -f "$file" ]; then
+            echo "File $file not found!"
+            exit 1
+          fi
+        done
+        
+        ls -la ./
+
     - name: Generate HTML from markdown
       run: |
         cd docs
