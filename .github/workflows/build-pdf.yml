@@ -15,6 +15,7 @@ permissions:
 jobs:
   build:
     runs-on: ubuntu-latest
+    if: github.repository == 'JumpsecLabs/Developer.Handbook'
 
     steps:
     - name: Checkout repository
@@ -29,10 +30,21 @@ jobs:
       run: |
         sudo apt-get install texlive-latex-base texlive-latex-extra texlive-fonts-recommended pandoc -y
 
+    - name: Verify files
+      run: |
+        cd docs
+        ls -la ./
+        for file in $(cat pandoc_order.txt); do
+          if [ ! -f "$file" ]; then
+            echo "File $file not found!"
+            exit 1
+          fi
+        done
+
     - name: Generate HTML from markdown
       run: |
         cd docs
-        pandoc css.md sections/01_introduction/README.md sections/02_code_of_conduct/README.md sections/03_programming_languages/README.md sections/04_code_styles/README.md sections/05_editors/README.md sections/06_version_control/README.md sections/07_project_setup/README.md sections/08_testing/README.md sections/09_ci_cd/README.md sections/10_documentation/README.md sections/11_security/README.md sections/12_performance/README.md sections/13_accessibility/README.md sections/99_learning_resources/README.md sections/999_appendix/README.md ISO27001.md metadata.yaml --include-before-body=version.md -s -o developer_handbook.html --toc --number-sections --wrap=none
+        pandoc $(cat pandoc_order.txt) ./metadata.yaml --include-before-body=./version.md -s -o developer_handbook.html --toc --number-sections --wrap=none
 
     - name: Generate PDF from HTML
       run: |
@@ -49,6 +61,7 @@ jobs:
   release:
     needs: build
     runs-on: ubuntu-latest
+    if: github.repository == 'JumpsecLabs/Developer.Handbook'
 
     steps:
     - name: Checkout repository
