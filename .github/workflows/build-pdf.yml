@@ -27,6 +27,7 @@ jobs:
 
     - name: Verify files
       run: |
+        cd docs
         ls -la ./
         for file in $(cat pandoc_order.txt); do
           if [ ! -f "$file" ]; then
