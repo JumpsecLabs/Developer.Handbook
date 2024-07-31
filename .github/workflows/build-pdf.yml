@@ -23,7 +23,7 @@ jobs:
 
     - name: Install pandoc
       run: |
-        sudo apt-get install texlive-latex-base pandoc -y
+        sudo apt-get install texlive-latex-base texlive-latex-extra texlive-fonts-recommended texlive-fonts-extra pandoc -y
 
     - name: Verify files
       run: |
