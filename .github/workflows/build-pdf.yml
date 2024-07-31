@@ -23,18 +23,17 @@ jobs:
 
     - name: Install pandoc
       run: |
-        pip install pipx 
-        pipx install pandoc
+        pip install --upgrade pandoc
 
     - name: Generate HTML from markdown
       run: |
         cd docs
-        pandoc $(cat pandoc_order.txt) metadata.yaml --include-before-body=version.md -s -o developer_handbook.html --toc --number-sections --wrap=none
+        python -m pandoc $(cat pandoc_order.txt) metadata.yaml --include-before-body=version.md -s -o developer_handbook.html --toc --number-sections --wrap=none
 
     - name: Generate PDF from HTML
       run: |
         cd docs
-        pandoc developer_handbook.html -s --pdf-engine=xelatex -o developer_handbook.pdf
+        python -m pandoc developer_handbook.html -s --pdf-engine=xelatex -o developer_handbook.pdf
 
     - name: Upload artifacts
       uses: actions/upload-artifact@v2
