@@ -23,18 +23,17 @@ jobs:
 
     - name: Install pandoc
       run: |
-        pip install setuptools --upgrade
-        pip install --upgrade pandoc
+        sudo apt-get install pandoc -y
 
     - name: Generate HTML from markdown
       run: |
         cd docs
-        python -m pandoc $(cat pandoc_order.txt) metadata.yaml --include-before-body=version.md -s -o developer_handbook.html --toc --number-sections --wrap=none
+        pandoc $(cat pandoc_order.txt) metadata.yaml --include-before-body=version.md -s -o developer_handbook.html --toc --number-sections --wrap=none
 
     - name: Generate PDF from HTML
       run: |
         cd docs
-        python -m pandoc developer_handbook.html -s --pdf-engine=xelatex -o developer_handbook.pdf
+        pandoc developer_handbook.html -s --pdf-engine=xelatex -o developer_handbook.pdf
 
     - name: Upload artifacts
       uses: actions/upload-artifact@v2
